@@ -1,0 +1,32 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "wafv2:*",
+                "shield:*",
+                "cognito-idp:*",
+                "waf-regional:*",
+                "ec2:*",
+                "acm:*",
+                "elasticloadbalancing:*",
+                "iam:ListServerCertificates",
+                "iam:GetServerCertificates"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateServiceLinkedRole"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
+                }
+            }
+        }
+    ]
+}

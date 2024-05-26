@@ -1,0 +1,32 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:*",
+                "pricing:*",
+                "eks:*",
+                "sqs:*",
+                "ssm:*",
+                "iam:CreateInstanceProfile",
+                "iam:TagInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:GetInstanceProfile"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": "iam:PassRole",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": "ec2.amazonaws.com"
+                }
+            }
+        }
+    ]
+}

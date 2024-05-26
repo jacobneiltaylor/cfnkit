@@ -1,0 +1,18 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssmmessages:*",
+                "ec2messages:*",
+                "eks-auth:*",
+                "ec2:*",
+                "eks:*",
+                "ecr:*",
+                "ssm:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

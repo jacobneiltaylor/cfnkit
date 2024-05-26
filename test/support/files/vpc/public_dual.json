@@ -1,0 +1,320 @@
+{
+    "Outputs": {
+        "fooVpcRefOutput": {
+            "Description": "Unique identifier of the VPC fooVpc",
+            "Value": {
+                "Ref": "fooVpc"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}-fooVpcRefOutput"
+                }
+            }
+        },
+        "fooVpcPublicSubnet1RefOutput": {
+            "Description": "Unique identifier of the subnet fooVpcPublicSubnet1",
+            "Value": {
+                "Ref": "fooVpcPublicSubnet1"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}-fooVpcPublicSubnet1RefOutput"
+                }
+            }
+        },
+        "fooVpcPublicSubnet2RefOutput": {
+            "Description": "Unique identifier of the subnet fooVpcPublicSubnet2",
+            "Value": {
+                "Ref": "fooVpcPublicSubnet2"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}-fooVpcPublicSubnet2RefOutput"
+                }
+            }
+        },
+        "fooVpcPublicSubnet3RefOutput": {
+            "Description": "Unique identifier of the subnet fooVpcPublicSubnet3",
+            "Value": {
+                "Ref": "fooVpcPublicSubnet3"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}-fooVpcPublicSubnet3RefOutput"
+                }
+            }
+        }
+    },
+    "Resources": {
+        "fooVpc": {
+            "Properties": {
+                "CidrBlock": "172.16.0.0/16",
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "vpc.${AWS::Region}.foo"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::VPC"
+        },
+        "fooInternetGateway": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "igw.${AWS::Region}.foo"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::InternetGateway"
+        },
+        "fooInternetGatewayAttachment": {
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "fooInternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "fooVpc"
+                }
+            },
+            "Type": "AWS::EC2::VPCGatewayAttachment"
+        },
+        "fooVpcIpv6Prefix": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "Ipv6CidrBlock": "2600:1f28:3e:4000::/56"
+            },
+            "Type": "AWS::EC2::VPCCidrBlock"
+        },
+        "fooEgressOnlyInternetGateway": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                }
+            },
+            "Type": "AWS::EC2::EgressOnlyInternetGateway"
+        },
+        "fooVpcPublicSubnet1": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "AvailabilityZone": "us-east-1a",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "subnet.${AWS::Region}.foo.us-east-1a.public"
+                        }
+                    }
+                ],
+                "CidrBlock": "172.16.0.0/24",
+                "Ipv6CidrBlock": "2600:1f28:3e:4000::/64",
+                "MapPublicIpOnLaunch": true
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "fooVpcPublicSubnet2": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "AvailabilityZone": "us-east-1b",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "subnet.${AWS::Region}.foo.us-east-1b.public"
+                        }
+                    }
+                ],
+                "CidrBlock": "172.16.1.0/24",
+                "Ipv6CidrBlock": "2600:1f28:3e:4001::/64",
+                "MapPublicIpOnLaunch": true
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "fooVpcPublicSubnet3": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "AvailabilityZone": "us-east-1c",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "subnet.${AWS::Region}.foo.us-east-1c.public"
+                        }
+                    }
+                ],
+                "CidrBlock": "172.16.2.0/24",
+                "Ipv6CidrBlock": "2600:1f28:3e:4002::/64",
+                "MapPublicIpOnLaunch": true
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "fooVpcPublicSubnet1RouteTable": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "rtb.${AWS::Region}.foo.us-east-1a.public"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "fooVpcPublicSubnet1RouteTableIpv4DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet1RouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet1RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet1RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet1RouteTableAssociation": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet1RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "fooVpcPublicSubnet1"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "fooVpcPublicSubnet2RouteTable": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "rtb.${AWS::Region}.foo.us-east-1b.public"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "fooVpcPublicSubnet2RouteTableIpv4DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet2RouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet2RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet2RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet2RouteTableAssociation": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet2RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "fooVpcPublicSubnet2"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "fooVpcPublicSubnet3RouteTable": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "fooVpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "rtb.${AWS::Region}.foo.us-east-1c.public"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "fooVpcPublicSubnet3RouteTableIpv4DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet3RouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet3RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet3RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPublicSubnet3RouteTableAssociation": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPublicSubnet3RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "fooVpcPublicSubnet3"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        }
+    }
+}

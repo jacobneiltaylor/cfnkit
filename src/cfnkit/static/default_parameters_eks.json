@@ -1,0 +1,67 @@
+{
+    "ClusterName": {
+        "Type": "String",
+        "Description": "Name of the EKS cluster"
+    },
+    "ClusterVersion": {
+        "Type": "String",
+        "Description": "The EKS version to use"
+    },
+    "ClusterSecurityGroupIds": {
+        "Type": "List<AWS::EC2::SecurityGroup::Id>",
+        "Description": "One or more security groups to associate with the EKS control plane"
+    },
+    "ClusterEbsCsiAddonVersion": {
+        "Type": "String",
+        "Description": "Version of the EBS CSI addon to use"
+    },
+    "ClusterVpcCniAddonVersion": {
+        "Type": "String",
+        "Description": "Version of the VPC CNI addon to use"
+    },
+    "ClusterCoreDnsAddonVersion": {
+        "Type": "String",
+        "Description": "Version of the CoreDNS addon to use"
+    },
+    "ClusterKubeProxyAddonVersion": {
+        "Type": "String",
+        "Description": "Version of the kube-proxy addon to use"
+    },
+    "ClusterPodIdentityAddonVersion": {
+        "Type": "String",
+        "Description": "Version of the eks-pod-identity-agent addon to use"
+    },
+    "VpcId": {
+        "Type": "AWS::EC2::VPC::Id",
+        "Description": "ID of the Amazon VPC for the cluster"
+    },
+    "SubnetIds": {
+        "Type": "List<AWS::EC2::Subnet::Id>",
+        "Description": "List of subnet IDs in the VPC"
+    },
+    "NodeGroupName": {
+        "Type": "String",
+        "Description": "Name of the EKS node group"
+    },
+    "NodeInstanceTypes": {
+        "Type": "List<String>",
+        "Description": "EC2 instance types for the worker nodes",
+        "Default": "t4g.medium"
+    },
+    "NodeAmiType": {
+        "Type": "String",
+        "Description": "AMI type for the worker nodes",
+        "Default": "AL2_ARM_64"
+    },
+    "DesiredCapacity": {
+        "Type": "Number",
+        "Description": "Desired number of worker nodes",
+        "Default": 3,
+        "MinValue": 3,
+        "MaxValue": 12
+    },
+    "OidcThumbprint": {
+        "Type": "String",
+        "Description": "The OIDC thumbprint for the regional EKS endpoint"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/${Provider}"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "${Provider}:aud": "sts.amazonaws.com",
+                    "${Provider}:sub": "system:serviceaccount:${Namespace}:${ServiceAccount}"
+                }
+            }
+        }
+    ]
+}
