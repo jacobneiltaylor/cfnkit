@@ -53,7 +53,9 @@ def _get_lb_controller_access_policy(role_name):
 def _get_external_secrets_access_policy(role_name):
     return iam.Policy(
         PolicyName=f"{role_name}AccessPolicy",
-        PolicyDocument=helpers.load_static_json("external_secrets"),
+        PolicyDocument=Sub(
+            helpers.load_static_json("external_secrets")
+        ),
     )
 
 
