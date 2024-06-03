@@ -13,3 +13,5 @@ Outputs = Generator[Output, None, Any]
 
 ParameterMap = dict[str, Parameter]
 ResourceMap = dict[str, AWSObject]
+
+StringPair = tuple[str,str]

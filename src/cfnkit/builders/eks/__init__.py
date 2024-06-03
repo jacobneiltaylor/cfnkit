@@ -1,7 +1,19 @@
-from cfnkit import helpers, constants
+from typing import Optional
+
+from cfnkit import helpers, constants, types
 from cfnkit.types import Parameters, Resources, Outputs, ParameterMap, ResourceMap
 from cfnkit.builders.builder import Builder
 from cfnkit.builders.eks import cluster, iam, nodes, addons, karpenter
+
+
+def _pair_to_dict(pair: Optional[types.StringPair]):
+    dct = {}
+    
+    if pair is not None:
+        key, value = pair
+        dct[key] = value
+
+    return dct
 
 
 def _get_boundary_param(**kwargs):
@@ -27,10 +39,14 @@ class EksClusterTemplateBuilder(Builder):
         enable_karpenter: bool = False,
         provide_boundaries: bool = False,
         enable_external_secrets: bool = False,
+        managed_node_group_taint: Optional[types.StringPair] = None,
+        managed_node_group_label: Optional[types.StringPair] = None,
     ) -> None:
         self.enable_karpenter = enable_karpenter
         self.provide_boundaries = provide_boundaries
         self.enable_external_secrets = enable_external_secrets
+        self.managed_node_group_taint = managed_node_group_taint
+        self.managed_node_group_label = managed_node_group_label
 
     @property
     def role_names(self):
@@ -146,17 +162,22 @@ class EksClusterTemplateBuilder(Builder):
             eks_cluster,
             ebs_csi_role,
             parameters["ClusterEbsCsiAddonVersion"],
+            self.managed_node_group_taint,
+            self.managed_node_group_label,
         )
 
         yield addons.get_vpc_cni_addon(
             eks_cluster,
             vpc_cni_role,
             parameters["ClusterVpcCniAddonVersion"],
+            self.managed_node_group_taint,
         )
 
         yield addons.get_coredns_addon(
             eks_cluster,
             parameters["ClusterCoreDnsAddonVersion"],
+            self.managed_node_group_taint,
+            self.managed_node_group_label,
         )
 
         yield addons.get_kubeproxy_addon(
@@ -165,10 +186,12 @@ class EksClusterTemplateBuilder(Builder):
         )
 
         yield addons.get_pod_identity_addon(
-            eks_cluster, parameters["ClusterPodIdentityAddonVersion"]
+            eks_cluster,
+            parameters["ClusterPodIdentityAddonVersion"],
+            self.managed_node_group_taint,
         )
 
-        # Managed Node Group
+        # Managed Node Group     
         yield nodes.get_managed_node_group(
             eks_cluster,
             parameters["NodeGroupName"],
@@ -177,6 +200,8 @@ class EksClusterTemplateBuilder(Builder):
             parameters["DesiredCapacity"],
             parameters["NodeInstanceTypes"],
             parameters["NodeAmiType"],
+            _pair_to_dict(self.managed_node_group_taint),
+            _pair_to_dict(self.managed_node_group_label),
         )
 
     def get_outputs(self, resources: ResourceMap) -> Outputs:

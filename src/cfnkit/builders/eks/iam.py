@@ -50,6 +50,13 @@ def _get_lb_controller_access_policy(role_name):
     )
 
 
+def _get_external_secrets_access_policy(role_name):
+    return iam.Policy(
+        PolicyName=f"{role_name}AccessPolicy",
+        PolicyDocument=helpers.load_static_json("external_secrets"),
+    )
+
+
 def _get_karpenter_access_policy(
     role_name, cluster: eks.Cluster, interrupt_queue: sqs.Queue, node_role: iam.Role
 ):
@@ -194,7 +201,7 @@ def get_external_secrets_irsa(cluster: eks.Cluster, boundary) -> iam.Role:
     return _get_role(
         role_name,
         trust_policy,
-        _get_lb_controller_access_policy(role_name),
+        _get_external_secrets_access_policy(role_name),
         PermissionsBoundary=Ref(boundary),
     )
 
