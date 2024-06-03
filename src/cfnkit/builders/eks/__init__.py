@@ -26,9 +26,11 @@ class EksClusterTemplateBuilder(Builder):
         self,
         enable_karpenter: bool = False,
         provide_boundaries: bool = False,
+        enable_external_secrets: bool = False,
     ) -> None:
         self.enable_karpenter = enable_karpenter
         self.provide_boundaries = provide_boundaries
+        self.enable_external_secrets = enable_external_secrets
 
     @property
     def role_names(self):
@@ -36,6 +38,9 @@ class EksClusterTemplateBuilder(Builder):
 
         if not self.enable_karpenter:
             keys.remove("Karpenter")
+
+        if not self.enable_external_secrets:
+            keys.remove("ExternalSecrets")
 
         return keys
 
@@ -130,6 +135,12 @@ class EksClusterTemplateBuilder(Builder):
             )
             yield iam.get_instance_profile("EksKarpenter", node_role)
 
+        if self.enable_external_secrets:
+            yield iam.get_external_secrets_irsa(
+                eks_cluster,
+                perm_boundaries["ExternalSecrets"],
+            )
+
         # Addons
         yield addons.get_ebs_csi_addon(
             eks_cluster,
@@ -183,4 +194,9 @@ class EksClusterTemplateBuilder(Builder):
             )
             yield from helpers.get_sqs_queue_outputs(
                 resources["EksKarpenterInterruptQueue"]
+            )
+
+        if self.enable_external_secrets:
+            yield helpers.get_role_output(
+                resources["EksExternalSecretsServiceAccountRole"]
             )

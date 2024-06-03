@@ -183,6 +183,22 @@ def get_karpenter_irsa(
     )
 
 
+def get_external_secrets_irsa(cluster: eks.Cluster, boundary) -> iam.Role:
+    role_name = "EksExternalSecretsServiceAccountRole"
+    provider = helpers.strip_scheme(cluster)
+
+    trust_policy = _get_eks_oidc_trust_policy(
+        provider, service_account="external-secrets-service-account"
+    )
+
+    return _get_role(
+        role_name,
+        trust_policy,
+        _get_lb_controller_access_policy(role_name),
+        PermissionsBoundary=Ref(boundary),
+    )
+
+
 def get_node_instance_role(boundary) -> iam.Role:
     role_name = "EksNodeEc2InstanceRole"
 

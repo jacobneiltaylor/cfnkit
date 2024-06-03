@@ -25,6 +25,7 @@ EKS_BOUNDARY_POLICIES = {
     "AwsVpcCni": "vpc_cni",
     "AwsEbsCsi": "ebs_csi",
     "Karpenter": "karpenter",
+    "ExternalSecrets": "external_secrets",
 }
 
 EKS_BOUNDARY_DESCS = {
@@ -34,4 +35,5 @@ EKS_BOUNDARY_DESCS = {
     "AwsVpcCni": "AWS VPC CNI",
     "AwsEbsCsi": "AWS EBS CSI",
     "Karpenter": "Karpenter controller",
+    "ExternalSecrets": "External Secrets Operator",
 }
