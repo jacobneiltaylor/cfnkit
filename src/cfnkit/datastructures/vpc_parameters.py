@@ -167,7 +167,7 @@ class VpcParameters:
 
         if ipv6_prefix is not None:
             public_subnets.ipv6_default_route = IPv6DefaultRoute.IGW
-            public_subnets.ipv6_default_route = IPv6DefaultRoute.EGRESS_ONLY_IGW
+            private_subnets.ipv6_default_route = IPv6DefaultRoute.EGRESS_ONLY_IGW
 
         groups = [public_subnets, private_subnets]
 
