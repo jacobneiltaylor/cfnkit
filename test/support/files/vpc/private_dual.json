@@ -350,8 +350,8 @@
                     "Ref": "fooVpcPublicSubnet1RouteTable"
                 },
                 "DestinationIpv6CidrBlock": "::/0",
-                "EgressOnlyInternetGatewayId": {
-                    "Ref": "fooEgressOnlyInternetGateway"
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
                 }
             },
             "Type": "AWS::EC2::Route"
@@ -401,8 +401,8 @@
                     "Ref": "fooVpcPublicSubnet2RouteTable"
                 },
                 "DestinationIpv6CidrBlock": "::/0",
-                "EgressOnlyInternetGatewayId": {
-                    "Ref": "fooEgressOnlyInternetGateway"
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
                 }
             },
             "Type": "AWS::EC2::Route"
@@ -452,8 +452,8 @@
                     "Ref": "fooVpcPublicSubnet3RouteTable"
                 },
                 "DestinationIpv6CidrBlock": "::/0",
-                "EgressOnlyInternetGatewayId": {
-                    "Ref": "fooEgressOnlyInternetGateway"
+                "GatewayId": {
+                    "Ref": "fooInternetGateway"
                 }
             },
             "Type": "AWS::EC2::Route"
@@ -497,6 +497,18 @@
             },
             "Type": "AWS::EC2::Route"
         },
+        "fooVpcPrivateSubnet1RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPrivateSubnet1RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "EgressOnlyInternetGatewayId": {
+                    "Ref": "fooEgressOnlyInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
         "fooVpcPrivateSubnet1RouteTableAssociation": {
             "Properties": {
                 "RouteTableId": {
@@ -536,6 +548,18 @@
             },
             "Type": "AWS::EC2::Route"
         },
+        "fooVpcPrivateSubnet2RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPrivateSubnet2RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "EgressOnlyInternetGatewayId": {
+                    "Ref": "fooEgressOnlyInternetGateway"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
         "fooVpcPrivateSubnet2RouteTableAssociation": {
             "Properties": {
                 "RouteTableId": {
@@ -571,6 +595,18 @@
                 "DestinationCidrBlock": "0.0.0.0/0",
                 "NatGatewayId": {
                     "Ref": "fooNatGateway2"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "fooVpcPrivateSubnet3RouteTableIpv6DefaultRoute": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "fooVpcPrivateSubnet3RouteTable"
+                },
+                "DestinationIpv6CidrBlock": "::/0",
+                "EgressOnlyInternetGatewayId": {
+                    "Ref": "fooEgressOnlyInternetGateway"
                 }
             },
             "Type": "AWS::EC2::Route"

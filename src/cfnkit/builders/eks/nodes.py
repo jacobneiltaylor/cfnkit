@@ -11,7 +11,8 @@ def _get_taints(taints: dict[str, str]):
             Effect="NO_SCHEDULE",
             Key=key,
             Value=value,
-        ) for key, value in taints.items()
+        )
+        for key, value in taints.items()
     ]
 
 
@@ -23,7 +24,7 @@ def get_managed_node_group(
     desired_capacity: Parameter,
     instance_types: Parameter,
     ami_type: Parameter,
-    taints: dict[str, str], 
+    taints: dict[str, str],
     labels: dict[str, str],
 ):
     kwargs = {
@@ -39,11 +40,11 @@ def get_managed_node_group(
             MaxSize=MAX_SIZE,
         ),
     }
-    
+
     if len(taints) > 0:
         kwargs["Taints"] = _get_taints(taints)
-        
+
     if len(labels) > 0:
         kwargs["Labels"] = labels
-    
+
     return eks.Nodegroup(title="EksClusterManagedNodeGroup", **kwargs)

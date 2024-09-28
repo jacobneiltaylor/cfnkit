@@ -8,7 +8,7 @@ from cfnkit.builders.eks import cluster, iam, nodes, addons, karpenter
 
 def _pair_to_dict(pair: Optional[types.StringPair]):
     dct = {}
-    
+
     if pair is not None:
         key, value = pair
         dct[key] = value
@@ -191,7 +191,7 @@ class EksClusterTemplateBuilder(Builder):
             self.managed_node_group_taint,
         )
 
-        # Managed Node Group     
+        # Managed Node Group
         yield nodes.get_managed_node_group(
             eks_cluster,
             parameters["NodeGroupName"],

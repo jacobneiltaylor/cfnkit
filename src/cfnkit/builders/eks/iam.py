@@ -53,9 +53,7 @@ def _get_lb_controller_access_policy(role_name):
 def _get_external_secrets_access_policy(role_name):
     return iam.Policy(
         PolicyName=f"{role_name}AccessPolicy",
-        PolicyDocument=Sub(
-            json.dumps(helpers.load_static_json("external_secrets"))
-        ),
+        PolicyDocument=Sub(json.dumps(helpers.load_static_json("external_secrets"))),
     )
 
 
@@ -197,7 +195,9 @@ def get_external_secrets_irsa(cluster: eks.Cluster, boundary) -> iam.Role:
     provider = helpers.strip_scheme(cluster)
 
     trust_policy = _get_eks_oidc_trust_policy(
-        provider, namespace="external-secrets", service_account="external-secrets-service-account"
+        provider,
+        namespace="external-secrets",
+        service_account="external-secrets-service-account",
     )
 
     return _get_role(
